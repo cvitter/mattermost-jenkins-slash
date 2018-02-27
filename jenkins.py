@@ -1,6 +1,9 @@
 from flask import Flask
+from flask import request
 import json
 import requests
+
+from _ast import Param
 
 __doc__ = """\
 jenkins.py
@@ -125,21 +128,56 @@ Flask application below
 
 readConfig()
 
-#o = callJenkinsApi( "help", "" )
-#o = callJenkinsApi( "list", "" )
-o = callJenkinsApi( "build", "mattermost-test-1" )
-
-print (o)
-
-
-
-
-# app = Flask(__name__)
-# 
-# @app.route( "/jenkins", methods = [ 'GET', 'POST' ] )
-# def slashCommand():
-#         return "Jenkins"
-# 
-# 
-# if __name__ == '__main__':
-#    app.run(host='0.0.0.0', port=5000, debug = False)
+app = Flask(__name__)
+ 
+@app.route( "/jenkins", methods = [ 'POST' ] )
+def slashCommand():
+    """
+    Get the text/body of the slash command send by the user
+    """
+    paramstring = ""
+    if len(request.form) > 0:
+        paramstring = request.form["text"]
+    
+    output = ""
+    if len(paramstring) > 0:
+        """
+        If the user wants to build a job their request in paramstring should
+        be something like "build jobname". We need to split the request out
+        into the command and the job and pass them to callJenkinsAPI
+        (not also true for list if they want to return the contents of a non
+        root directory in Jenkins)
+        """
+        if paramstring.find(" ") != -1:
+            params = paramstring.split(" ")
+            output = callJenkinsApi( params[0], params[1] )
+        else:
+            output = callJenkinsApi( "list", "" )
+        
+    else:
+        output = callJenkinsApi( "help", "" )
+    
+    """
+    Create data json object to return to Mattermost with
+        response_type = in_channel (everyone sees) or ephemeral (only sender sees)
+        text = the message to send
+    """
+    data = {
+        "response_type": "in_channel",
+        "text": output,
+    }
+    
+    """
+    Create the response object to send to Mattermost with the
+    data object written as json, 200 status, and proper mimetype
+    """
+    response = app.response_class(
+        response = json.dumps(data),
+        status = 200,
+        mimetype = 'application/json'
+    )
+    return response
+ 
+ 
+if __name__ == '__main__':
+   app.run(host='0.0.0.0', port=5002, debug = False)
