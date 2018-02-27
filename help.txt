@@ -2,12 +2,14 @@
 
 To get help for this slash command call the slash command with no parameters (i.e. `/jenkins`) or using the `help` 
 parameter (i.e. `/jenkins help`).
-
-`/jenkins list`
+   
+* `/jenkins list`
 The `list` command returns a list of jobs and folders for a given folder (by default the server's root folder). To 
 return the contents of a non-root add the folder as the second parameter of the command: `/jenkins list foldername`.
-If the folder in question is two or more levels deep separate you need to pass the full list of folders separated 
+If the folder in question is two or more levels deep you need to pass the full list of folders separated 
 by the pipe `|` like: `/jenkins list level1|level2|level3`.
-.
-`/jenkins build`
-
+   
+* `/jenkins build`
+The `build` command schedules the job specified to build immediately (this integration doesn't currently support 
+scheduling a build out into the future). If the job in question is two or more levels deep you will need to pass 
+the full list of folders separated by the pipe `|` like: `/jenkins build level1|level2|jobname`.

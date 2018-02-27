@@ -7,6 +7,7 @@ jenkins.py
 
 """
 
+
 def readConfig():
     """
     Read config.json for Jenkins server access info
@@ -19,7 +20,7 @@ def readConfig():
     jenkinsUrl = d["jenkins"]["baseUrl"]
     username = d["user"]["userName"]
     password = d["user"]["password"]
-    return
+
 
 
 def createFolderUrl(foldersIn):
@@ -33,11 +34,13 @@ def createFolderUrl(foldersIn):
     return folderUrl
 
 
-def createListOut(jsonIn):
+
+def createJobListOut(requestUrl, jsonIn):
     """
-    Takes JSON document with list of items (jobs/folders) and returns markdown
+    Takes JSON document with list of items (jobs/folders) and returns a markdown table
     """
-    markdown = "| Type | Name |\n"
+    markdown = "Folders and Jobs in " + requestUrl + "\n\n"
+    markdown += "| Type | Name |\n"
     markdown += "|:-----|:-----|\n"
     for listItem in jsonIn["jobs"]:
         type = ""
@@ -46,54 +49,73 @@ def createListOut(jsonIn):
         else:
             type = "Job"
         markdown += "| " + type + " | " + listItem["name"] + " |\n"
-        
-    print ( markdown )
     return markdown
 
 
 
-def callJenkinsApi(jenkinsApi, jenkinsFolders, jenkinsArgs):
+def parseParameters(parameters):
+    """
+    Parse the parameters passed by the slash command
+    """
+    d = parameters.split(" ")
+    return d
+
+
+
+def callJenkinsApi(jenkinsApi, jenkinsFolders):
     """
     Call the Jenkins API and fetch the JSON response
         List jobs: api/json?tree=jobs[name]
         
-    """ 
-    #
-    if jenkinsApi == "list":
-        print ""
-    elif jenkinsApi == "run":
-        print ""
-    else:
-        print ""
-        
-    #
+    """
+    targetUrl = ""
     folderUrl = ""
+    responseValue = ""
+    
+    # Create proper url for folders
     if len(jenkinsFolders) > 0 :
-        folderUrl = createFolderUrl(jenkinsFolders)
+        folderUrl = createFolderUrl(jenkinsFolders)   
     
-    # Build the URL for the API request
-    targetUrl = jenkinsUrl + folderUrl + "api/json?tree=jobs[name]"
-    
-    print ( targetUrl )
-    
-    # Send API request to Jenkins server with authentication
-    r = requests.get(targetUrl, auth=(username, password))
-    
-    
-    createListOut(r.json())
-    
-    # Return the JSON response
-    return r.text
-
-
-
-
-
-def returnHelp():
-    """
-    """
-    
-    return ""
+    if jenkinsApi == "list":
+        # Build URL
+        targetUrl = jenkinsUrl + folderUrl + "api/json?tree=jobs[name]"
+        # Send API request to Jenkins server with authentication
+        r = requests.get(targetUrl, auth=(username, password))
+        # Set the responseValue to return
+        responseValue = createJobListOut(jenkinsUrl + folderUrl, r.json())
+        
+    elif jenkinsApi == "build":
+        """
+        Jenkins requires a crumb to run a build remotely using post
+        This first block of calls the crumb issuer on our server and
+        retrieves the crumb for use in the next block
+        """
+        r = requests.get(jenkinsUrl + 'crumbIssuer/api/json', auth=(username, password))
+        d = json.loads( r.text )
+        crumb = d["crumb"]
+        
+        """
+        Create the target URL for the build and post to Jenkins passing the crumb
+        """
+        targetUrl = jenkinsUrl + folderUrl + "build"
+        r = requests.post(targetUrl, data={}, auth=(username, password), headers={"Jenkins-Crumb": crumb})
+        
+        """
+        Process stats code, 201 == "Build run yay!" and anything else is
+        a problem that we need to report on
+        """
+        if r.status_code == 201:
+            responseValue = "Job " + targetUrl + " scheduled to start successfully."
+        else:
+            responseValue = "Error Code: " + str(r.status_code)
+        
+    else:
+        """
+        Returns the help in responseValue
+        """
+        responseValue = open('help.txt').read()
+        
+    return responseValue
 
 
 """
@@ -103,7 +125,9 @@ Flask application below
 
 readConfig()
 
-o = callJenkinsApi( "listJobs", "", "" )
+#o = callJenkinsApi( "help", "" )
+#o = callJenkinsApi( "list", "" )
+o = callJenkinsApi( "build", "mattermost-test-1" )
 
 print (o)
 
