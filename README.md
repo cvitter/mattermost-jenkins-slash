@@ -67,8 +67,36 @@ as shown in the screenshot below:
 
 ![Screenshot of the help function](images/help.png)
 
-The slash command also takes two arguments. 
+If you want to view the list of items (jobs and folders) on your Jenkins server you can type:
 
+```
+/jenkins list
+```
+If you leave off the folder/job parameter like in the above example Jenkins will return the list of objects in the server's 
+root like shown below:
+
+![Screenshot of the list function](images/list.png)
+
+If you want to see what is in the **Level1** folder you would type:
+
+```
+/jenkins list Level1
+```
+
+To schedule a build (to run immediately) you can type:
+
+```
+/jenkins build mattermost-test-1
+```
+
+If the job succeeds you will see the following response:
+
+![Screenshot of the build function](images/build.png) 
+
+If the slash command fails it should return an HTTP error code as shown in the screen shot below if the 
+resource can't be found on the Jenkins server.
+
+![Screenshot of an error](images/error.png)
 
 
 # Questions, Feedback, Pull Requests Etc.
