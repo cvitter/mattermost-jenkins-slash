@@ -25,13 +25,28 @@ The following steps
 2. Clone this repository to your machine: `git clone https://github.com/cvitter/mattermost-jenkins-slash.git`;
 3. Copy the `config.sample` file to `config.json`;
 4. Edit `config.json` to set the URL for your Jenkins server and the user name and password of the account you will use to access it;
-5. Run the Flask application
+5. Run the Flask application - there are a number of ways to run the application but I use the following command that runs the 
+application headlessly and captures output into a log file for troubleshooting:
+
+```
+sudo python jenkins.py >> jenkins.log 2>&1 &
+```
 
 **Note**: When the application is running you can test it locally by posting data to it using curl like the following example:
 
 ```
 curl -X POST -F "text=build mattermost-test-1" http://127.0.0.1:5002/jenkins
 ```
+
+## Setup the Slash Command
+
+Now that the Flask application is running you have to configure your slash command in Mattermost to connect to the 
+application. Inside of Mattermost:
+
+1. Click on the **Main Menu** (located in the left hand side bar next to your team and user name);
+2. Select **Integrations** from the dropdown menu;
+3. 
+
 
 # Using the Slash Command
 
@@ -42,7 +57,7 @@ as shown in the screenshot below:
 
 The slash command also takes two arguments. 
 
-## Setup the Slash Command
+
 
 # Questions, Feedback, Pull Requests Etc.
 
