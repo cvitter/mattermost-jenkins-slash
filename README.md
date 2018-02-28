@@ -33,6 +33,15 @@ The following steps
 curl -X POST -F "text=build mattermost-test-1" http://127.0.0.1:5002/jenkins
 ```
 
+# Using the Slash Command
+
+Once the slash command is set up it is quite easy to use. If users have any questions simply type `/jenkins` will return command help
+as shown in the screenshot below:
+
+![Screenshot of the help function](images/help.png)
+
+The slash command also takes two arguments. 
+
 ## Setup the Slash Command
 
 # Questions, Feedback, Pull Requests Etc.
