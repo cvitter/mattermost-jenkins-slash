@@ -44,9 +44,21 @@ Now that the Flask application is running you have to configure your slash comma
 application. Inside of Mattermost:
 
 1. Click on the **Main Menu** (located in the left hand side bar next to your team and user name);
-2. Select **Integrations** from the dropdown menu;
-3. 
-
+2. Select **Integrations** from the drop down menu;
+3. Click on **Slash Commands**;
+4. Click on **Add Slash Command**;
+5. Fill in the form (refer to Mattermost help for full explanations of each field):
+	1. Title - your choice (i.e. Jenkins Slash Command)
+	2. Description - your choice again;
+	3. Command Trigger Work - jenkins (unless you want to use something different like 'butler')
+	4. Request URL - the URL of your flask application (i.e. http://something.com:5002/jenkins)
+	5. Response Username - optional
+	6. Response Icon - optional
+	7. Autocomplete - check this so your users know that the slash command exists
+	8. Autocomplete Hint - I have '[list or build] [folder or job]' in mine (you can use whatever works for you)
+	9. Autocomplete Description - I have 'The Butler is at your command!' in mine
+6. Click **Save** to create the slash command.
+7. Test the slash command from within Mattermost and profit!
 
 # Using the Slash Command
 
