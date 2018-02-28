@@ -139,6 +139,7 @@ def slashCommand():
     if len(request.form) > 0:
         paramstring = request.form["text"]
     
+    response_type = "ephemeral"
     output = ""
     if len(paramstring) > 0:
         """
@@ -151,8 +152,18 @@ def slashCommand():
         if paramstring.find(" ") != -1:
             params = paramstring.split(" ")
             output = callJenkinsApi( params[0], params[1] )
+            """
+            When we send our response back to Mattermost only the build
+            response will appear to all users in a channel, help and list
+            responses will only appear to the user who requested them
+            """
+            if params[0] == "build":
+                response_type = "in_channel"
         else:
-            output = callJenkinsApi( "list", "" )
+            if paramstring == "list":
+                output = callJenkinsApi( "list", "" )
+            else:
+                output = callJenkinsApi( "help", "" )
         
     else:
         output = callJenkinsApi( "help", "" )
@@ -163,7 +174,7 @@ def slashCommand():
         text = the message to send
     """
     data = {
-        "response_type": "in_channel",
+        "response_type": response_type,
         "text": output,
     }
     
