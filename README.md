@@ -48,15 +48,15 @@ application. Inside of Mattermost:
 3. Click on **Slash Commands**;
 4. Click on **Add Slash Command**;
 5. Fill in the form (refer to Mattermost help for full explanations of each field):
-	a. Title - your choice (i.e. Jenkins Slash Command)
-	b. Description - your choice again;
-	c. Command Trigger Work - jenkins (unless you want to use something different like 'butler')
-	d. Request URL - the URL of your flask application (i.e. http://something.com:5002/jenkins)
-	e. Response Username - optional
-	f. Response Icon - optional
-	g. Autocomplete - check this so your users know that the slash command exists
-	h. Autocomplete Hint - I have '[list or build] [folder or job]' in mine (you can use whatever works for you)
-	i. Autocomplete Description - I have 'The Butler is at your command!' in mine
+	1. Title - your choice (i.e. Jenkins Slash Command)
+	2. Description - your choice again;
+	3. Command Trigger Work - jenkins (unless you want to use something different like 'butler')
+	4. Request URL - the URL of your flask application (i.e. http://something.com:5002/jenkins)
+	5. Response Username - optional
+	6. Response Icon - optional
+	7. Autocomplete - check this so your users know that the slash command exists
+	8. Autocomplete Hint - I have '[list or build] [folder or job]' in mine (you can use whatever works for you)
+	9. Autocomplete Description - I have 'The Butler is at your command!' in mine
 6. Click **Save** to create the slash command.
 7. Test the slash command from within Mattermost and profit!
 
