@@ -99,7 +99,10 @@ resource can't be found on the Jenkins server.
 ![Screenshot of an error](images/error.png)
 
 
-# Questions, Feedback, Pull Requests Etc.
+# Make this Project Better (Questions, Feedback, Pull Requests Etc.!)
+
+**Help!** If you like this project and want to make it even more awesome please contribute your ideas,
+code, etc.
 
 If you have any questions, feedback, suggestions, etc. please submit them via issues here: https://github.com/cvitter/mattermost-jenkins-slash/issues
 
