@@ -6,7 +6,7 @@ This repository is contains a Python Flask application that powers a slash comma
  
  **Import Note**: This application is not really designed for production use. It is meant 
  only to demonstrate how to connect Mattermost and Jenkins together easily using commonly
- available tools like Python and Flash.
+ available tools like Python and Flask (http://flask.pocoo.org/).
  
 # Installing the Slash Command
 
@@ -62,8 +62,8 @@ application. Inside of Mattermost:
 
 # Using the Slash Command
 
-Once the slash command is set up it is quite easy to use. If users have any questions simply type `/jenkins` will return command help
-as shown in the screenshot below:
+Once the slash command is set up it is quite easy to use. If you have any questions you can simply 
+type `/jenkins` will return command help as shown in the screenshot below:
 
 ![Screenshot of the help function](images/help.png)
 
