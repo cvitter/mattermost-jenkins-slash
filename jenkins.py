@@ -3,8 +3,6 @@ from flask import request
 import json
 import requests
 
-from _ast import Param
-
 __doc__ = """\
 jenkins.py
 
